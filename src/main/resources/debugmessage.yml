@@ -1,0 +1,4 @@
+# SagaLib 调试消息配置文件
+plugin:
+  enable: "&e[SagaLib-Debug] 插件已启动!"
+  disable: "&e[SagaLib-Debug] 插件已关闭!" 

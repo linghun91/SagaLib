@@ -1,0 +1,11 @@
+# SagaLib 中文语言文件
+plugin:
+  enable: "&a[SagaLib] 插件已启用"
+  disable: "&c[SagaLib] 插件已禁用"
+  reload: "&a[SagaLib] 插件已重载"
+
+gui:
+  close: "&c关闭"
+  next_page: "&a下一页"
+  previous_page: "&c上一页"
+  current_page: "&e当前页: %page%/%total%" 
