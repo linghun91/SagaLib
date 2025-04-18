@@ -1,0 +1,4 @@
+# SagaLib 消息配置文件
+plugin:
+  enable: "&aSagaLib 插件已启动!"
+  disable: "&cSagaLib 插件已关闭!" 

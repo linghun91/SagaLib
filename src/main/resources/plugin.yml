@@ -1,0 +1,16 @@
+name: SagaLib
+version: 1.0.0
+main: cn.i7mc.sagalib.SagaLib
+api-version: 1.20
+authors: [i7mc]
+description: A general-purpose library for Minecraft plugin development
+depend: [PlaceholderAPI]
+commands:
+  example:
+    description: 测试SagaLib的功能
+    usage: /<command> [items|text|color]
+    permission: sagalib.example
+  hologram:
+    description: 全息文本功能示例命令
+    usage: /<command> [create|remove|update|animation|progress]
+    permission: sagalib.hologram

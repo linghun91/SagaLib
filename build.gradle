@@ -1,0 +1,99 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+apply plugin: 'java'
+
+group = 'cn.i7mc'
+version = '1.0.0'
+description = 'A general-purpose library for Minecraft plugin development'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+// 指定Java 17路径
+tasks.withType(JavaCompile).configureEach {
+    options.fork = true
+    options.forkOptions.executable = '/usr/local/oracle-java-17/zulu17.56.15-ca-jdk17.0.14-linux_x64/bin/javac'
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.fork = true
+    options.forkOptions.executable = '/usr/local/oracle-java-17/zulu17.56.15-ca-jdk17.0.14-linux_x64/bin/javadoc'
+}
+
+// 配置代理
+System.setProperty('socksProxyHost', '127.0.0.1')
+System.setProperty('socksProxyPort', '10808')
+
+// 配置HTTP代理
+System.setProperty('http.proxyHost', '127.0.0.1')
+System.setProperty('http.proxyPort', '10808')
+System.setProperty('https.proxyHost', '127.0.0.1')
+System.setProperty('https.proxyPort', '10808')
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        name = 'placeholderapi'
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly files('libs/PlaceholderAPI.jar')
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+processResources {
+    def props = [
+        'version': version,
+        'description': project.description,
+        'apiVersion': '1.20'
+    ]
+
+    inputs.properties props
+
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    relocate 'org.bstats', 'cn.i7mc.sagalib.libs.bstats'
+}
+
+tasks.build.dependsOn(shadowJar)
+
+// 排除1.21版本特有的类
+sourceSets {
+    main {
+        java {
+            exclude 'cn/i7mc/sagalib/gui/holder/boat/**'
+            exclude 'cn/i7mc/sagalib/gui/holder/container/CrafterGuiHolder.java'
+        }
+    }
+}

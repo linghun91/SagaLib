@@ -1,0 +1,13 @@
+rootProject.name = 'sagalib'
+
+// 配置代理
+gradle.projectsLoaded {
+    System.setProperty('socksProxyHost', '127.0.0.1')
+    System.setProperty('socksProxyPort', '10808')
+
+    // 配置HTTP代理
+    System.setProperty('http.proxyHost', '127.0.0.1')
+    System.setProperty('http.proxyPort', '10808')
+    System.setProperty('https.proxyHost', '127.0.0.1')
+    System.setProperty('https.proxyPort', '10808')
+}
