@@ -6,7 +6,11 @@ import cn.i7mc.sagalib.gui.listener.GuiListener;
 import cn.i7mc.sagalib.command.ExampleCommand;
 import cn.i7mc.sagalib.config.ConfigManager;
 import cn.i7mc.sagalib.config.LanguageManager;
+import cn.i7mc.sagalib.hologram.HologramManager;
+import cn.i7mc.sagalib.example.HologramExample;
+import cn.i7mc.sagalib.example.HologramTabCompleter;
 import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +30,7 @@ public class SagaLib extends JavaPlugin {
     private static SagaLibAPI api;
     private ConfigManager configManager;
     private LanguageManager languageManager;
+    private HologramManager hologramManager;
 
     @Override
     public void onEnable() {
@@ -44,6 +49,7 @@ public class SagaLib extends JavaPlugin {
         // 初始化管理器
         configManager = new ConfigManager(this);
         languageManager = new LanguageManager(this);
+        hologramManager = new HologramManager(this);
         api = new SagaLibAPIImpl(this);
 
         // 输出启动消息
@@ -62,9 +68,14 @@ public class SagaLib extends JavaPlugin {
 
         // 注册事件监听器
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
+        
 
         // 注册命令
         getCommand("example").setExecutor(new ExampleCommand());
+        
+        // 注册全息文本示例命令和补全器
+        getCommand("hologram").setExecutor(new HologramExample(this));
+        getCommand("hologram").setTabCompleter(new HologramTabCompleter());
     }
 
     @Override
@@ -111,5 +122,22 @@ public class SagaLib extends JavaPlugin {
 
     public LanguageManager getLanguageManager() {
         return languageManager;
+    }
+    
+    /**
+     * 获取HologramManager实例
+     * @return HologramManager实例
+     */
+    public HologramManager getHologramManager() {
+        return hologramManager;
+    }
+    
+    /**
+     * 创建NamespacedKey
+     * @param key 键名
+     * @return NamespacedKey实例
+     */
+    public NamespacedKey getKey(String key) {
+        return new NamespacedKey(this, key);
     }
 } 

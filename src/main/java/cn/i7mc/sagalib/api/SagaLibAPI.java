@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.Material;
 import cn.i7mc.sagalib.SagaLib;
+import cn.i7mc.sagalib.hologram.animation.HologramAnimation;
+import org.bukkit.Color;
 
 import java.util.List;
 import java.util.Map;
@@ -263,4 +265,248 @@ public interface SagaLibAPI {
      * @param placeholder 占位符处理器
      */
     void registerPlaceholder(String name, java.util.function.Function<Player, String> placeholder);
+    
+    // =============== TextDisplay全息显示系统 ===============
+    
+    /**
+     * 创建全息文本
+     * @param location 位置
+     * @param text 文本内容
+     * @return 全息文本ID
+     */
+    String createHologram(org.bukkit.Location location, String text);
+    
+    /**
+     * 创建全息文本(带背景颜色)
+     * @param location 位置
+     * @param text 文本内容
+     * @param bgColor 背景颜色
+     * @return 全息文本ID
+     */
+    String createHologram(org.bukkit.Location location, String text, org.bukkit.Color bgColor);
+    
+    /**
+     * 创建全息文本(完整参数)
+     * @param location 位置
+     * @param text 文本内容
+     * @param bgColor 背景颜色
+     * @param alignment 对齐方式
+     * @param lineWidth 行宽
+     * @param opacity 不透明度
+     * @param shadowed 是否有阴影
+     * @param seeThrough 是否透视
+     * @return 全息文本ID
+     */
+    String createHologram(org.bukkit.Location location, String text, org.bukkit.Color bgColor, 
+                          org.bukkit.entity.TextDisplay.TextAlignment alignment, int lineWidth, 
+                          byte opacity, boolean shadowed, boolean seeThrough);
+    
+    /**
+     * 删除全息文本
+     * @param id 全息文本ID
+     * @return 是否成功删除
+     */
+    boolean removeHologram(String id);
+    
+    /**
+     * 更新全息文本内容
+     * @param id 全息文本ID
+     * @param text 新文本内容
+     * @return 是否成功更新
+     */
+    boolean updateHologramText(String id, String text);
+    
+    /**
+     * 更新全息文本位置
+     * @param id 全息文本ID
+     * @param location 新位置
+     * @return 是否成功更新
+     */
+    boolean updateHologramLocation(String id, org.bukkit.Location location);
+    
+    /**
+     * 更新全息文本样式
+     * @param id 全息文本ID
+     * @param bgColor 背景颜色
+     * @param alignment 对齐方式
+     * @param lineWidth 行宽
+     * @param opacity 不透明度
+     * @param shadowed 是否有阴影
+     * @param seeThrough 是否透视
+     * @return 是否成功更新
+     */
+    boolean updateHologramStyle(String id, org.bukkit.Color bgColor, 
+                                org.bukkit.entity.TextDisplay.TextAlignment alignment, int lineWidth, 
+                                byte opacity, boolean shadowed, boolean seeThrough);
+    
+    /**
+     * 获取全息文本实体
+     * @param id 全息文本ID
+     * @return 全息文本实体
+     */
+    org.bukkit.entity.TextDisplay getHologramEntity(String id);
+    
+    /**
+     * 添加全息文本进度条
+     * @param location 位置
+     * @param width 宽度
+     * @param height 高度
+     * @param progress 进度(0-1)
+     * @param fillColor 填充颜色
+     * @param bgColor 背景颜色
+     * @return 进度条ID
+     */
+    String createProgressBar(org.bukkit.Location location, float width, float height, 
+                             double progress, org.bukkit.Color fillColor, org.bukkit.Color bgColor);
+    
+    /**
+     * 更新全息文本进度条
+     * @param id 进度条ID
+     * @param progress 新进度(0-1)
+     * @return 是否成功更新
+     */
+    boolean updateProgressBar(String id, double progress);
+    
+    /**
+     * 创建滚动文本动画
+     * @param text 滚动文本
+     * @param speed 滚动速度(tick间隔)
+     * @param loop 是否循环
+     * @return 动画实例
+     */
+    HologramAnimation createScrollingTextAnimation(String text, int speed, boolean loop);
+    
+    /**
+     * 创建淡入淡出动画
+     * @param fadeInTime 淡入时间(ticks)
+     * @param stayTime 保持时间(ticks)
+     * @param fadeOutTime 淡出时间(ticks)
+     * @return 动画实例
+     */
+    HologramAnimation createFadeAnimation(int fadeInTime, int stayTime, int fadeOutTime);
+    
+    /**
+     * 创建颜色变换动画
+     * @param colors 颜色列表
+     * @param interval 变换间隔(ticks)
+     * @param smooth 是否平滑过渡
+     * @return 动画实例
+     */
+    HologramAnimation createColorChangeAnimation(List<Color> colors, int interval, boolean smooth);
+    
+    /**
+     * 启动全息文本动画
+     * @param hologramId 全息文本ID
+     * @param animationId 动画ID
+     * @return 是否成功启动
+     */
+    boolean startHologramAnimation(String hologramId, String animationId);
+    
+    /**
+     * 停止全息文本动画
+     * @param hologramId 全息文本ID
+     * @param animationId 动画ID
+     * @return 是否成功停止
+     */
+    boolean stopHologramAnimation(String hologramId, String animationId);
+    
+    /**
+     * 创建圆形进度条
+     * @param location 位置
+     * @param radius 半径
+     * @param progress 进度(0-1)
+     * @param fillColor 填充颜色
+     * @param bgColor 背景颜色
+     * @return 进度条ID
+     */
+    String createCircularProgressBar(org.bukkit.Location location, float radius, 
+                                   double progress, org.bukkit.Color fillColor, org.bukkit.Color bgColor);
+    
+    /**
+     * 更新圆形进度条
+     * @param id 进度条ID
+     * @param progress 新进度(0-1)
+     * @return 是否成功更新
+     */
+    boolean updateCircularProgressBar(String id, double progress);
+    
+    /**
+     * 创建垂直进度条
+     * @param location 位置
+     * @param width 宽度
+     * @param height 高度
+     * @param progress 进度(0-1)
+     * @param fillColor 填充颜色
+     * @param bgColor 背景颜色
+     * @return 进度条ID
+     */
+    String createVerticalProgressBar(org.bukkit.Location location, float width, float height, 
+                                   double progress, org.bukkit.Color fillColor, org.bukkit.Color bgColor);
+    
+    /**
+     * 更新垂直进度条
+     * @param id 进度条ID
+     * @param progress 新进度(0-1)
+     * @return 是否成功更新
+     */
+    boolean updateVerticalProgressBar(String id, double progress);
+    
+    /**
+     * 创建交互式信息面板
+     * @param location 位置
+     * @param title 标题
+     * @param content 内容
+     * @param interactionTag 交互标签(用于识别点击事件)
+     * @param bgColor 背景颜色
+     * @return 面板ID
+     */
+    String createInteractivePanel(org.bukkit.Location location, String title, String content, 
+                                String interactionTag, org.bukkit.Color bgColor);
+    
+    /**
+     * 更新信息面板内容
+     * @param id 面板ID
+     * @param title 新标题
+     * @param content 新内容
+     * @return 是否成功更新
+     */
+    boolean updatePanel(String id, String title, String content);
+    
+    /**
+     * 设置面板交互标签
+     * @param id 面板ID
+     * @param interactionTag 新交互标签
+     * @return 是否成功设置
+     */
+    boolean setPanelInteractionTag(String id, String interactionTag);
+    
+    /**
+     * 创建多行文本面板
+     * @param location 位置
+     * @param title 标题
+     * @param lines 文本行数组
+     * @param bgColor 背景颜色
+     * @return 面板ID
+     */
+    String createMultilinePanel(org.bukkit.Location location, String title, String[] lines, org.bukkit.Color bgColor);
+    
+    /**
+     * 创建自动更新面板
+     * @param location 位置
+     * @param title 标题
+     * @param initialContent 初始内容
+     * @param updateInterval 更新间隔(tick)
+     * @param contentSupplier 内容提供者函数
+     * @param bgColor 背景颜色
+     * @return 面板ID
+     */
+    String createAutoUpdatePanel(org.bukkit.Location location, String title, String initialContent, 
+                               int updateInterval, java.util.function.Supplier<String> contentSupplier, org.bukkit.Color bgColor);
+    
+    /**
+     * 停止面板自动更新
+     * @param id 面板ID
+     * @return 是否成功停止
+     */
+    boolean stopAutoUpdate(String id);
 } 

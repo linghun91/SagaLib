@@ -24,6 +24,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.Material;
+import cn.i7mc.sagalib.hologram.HologramManager;
+import cn.i7mc.sagalib.hologram.animation.ColorChangeAnimation;
+import cn.i7mc.sagalib.hologram.animation.FadeAnimation;
+import cn.i7mc.sagalib.hologram.animation.HologramAnimation;
+import cn.i7mc.sagalib.hologram.animation.ScrollingTextAnimation;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.entity.TextDisplay;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +49,7 @@ public class SagaLibAPIImpl implements SagaLibAPI {
     private final GuiUtil guiUtil;
     private final Map<String, java.util.function.Function<Player, String>> customPlaceholders;
     private final Map<String, GuiAnimation> animations;
+    private final Map<String, HologramAnimation> hologramAnimations;
 
     public SagaLibAPIImpl(SagaLib plugin) {
         this.plugin = plugin;
@@ -51,6 +60,7 @@ public class SagaLibAPIImpl implements SagaLibAPI {
         this.guiUtil = new GuiUtil();
         this.customPlaceholders = new HashMap<>();
         this.animations = new HashMap<>();
+        this.hologramAnimations = new HashMap<>();
     }
 
     // =============== GUI系统API实现 ===============
@@ -284,5 +294,209 @@ public class SagaLibAPIImpl implements SagaLibAPI {
                 ((BaseGuiHolder) holder).applyLayout(new GuiButton[0]);
             }
         }
+    }
+
+    // =============== TextDisplay全息显示系统API实现 ===============
+
+    @Override
+    public String createHologram(Location location, String text) {
+        return plugin.getHologramManager().createHologram(location, text);
+    }
+
+    @Override
+    public String createHologram(Location location, String text, Color bgColor) {
+        return plugin.getHologramManager().createHologram(location, text, bgColor);
+    }
+
+    @Override
+    public String createHologram(Location location, String text, Color bgColor, 
+                                TextDisplay.TextAlignment alignment, int lineWidth, 
+                                byte opacity, boolean shadowed, boolean seeThrough) {
+        return plugin.getHologramManager().createHologram(
+            location, text, bgColor, alignment, lineWidth, opacity, shadowed, seeThrough
+        );
+    }
+
+    @Override
+    public boolean removeHologram(String id) {
+        return plugin.getHologramManager().removeHologram(id);
+    }
+
+    @Override
+    public boolean updateHologramText(String id, String text) {
+        return plugin.getHologramManager().updateText(id, text);
+    }
+
+    @Override
+    public boolean updateHologramLocation(String id, Location location) {
+        return plugin.getHologramManager().updateLocation(id, location);
+    }
+
+    @Override
+    public boolean updateHologramStyle(String id, Color bgColor, TextDisplay.TextAlignment alignment, 
+                                      int lineWidth, byte opacity, boolean shadowed, boolean seeThrough) {
+        return plugin.getHologramManager().updateStyle(
+            id, bgColor, alignment, lineWidth, opacity, shadowed, seeThrough
+        );
+    }
+
+    @Override
+    public TextDisplay getHologramEntity(String id) {
+        return plugin.getHologramManager().getHologram(id);
+    }
+
+    @Override
+    public String createProgressBar(Location location, float width, float height, 
+                                   double progress, Color fillColor, Color bgColor) {
+        return plugin.getHologramManager().createProgressBar(location, width, height, progress, fillColor, bgColor);
+    }
+
+    @Override
+    public boolean updateProgressBar(String id, double progress) {
+        return plugin.getHologramManager().updateProgressBar(id, progress);
+    }
+
+    /**
+     * 创建滚动文本动画
+     * @param text 滚动文本
+     * @param speed 滚动速度(tick间隔)
+     * @param loop 是否循环
+     * @return 动画实例
+     */
+    public HologramAnimation createScrollingTextAnimation(String text, int speed, boolean loop) {
+        HologramAnimation animation = new ScrollingTextAnimation(plugin, text, speed, loop);
+        hologramAnimations.put(animation.getId(), animation);
+        return animation;
+    }
+
+    /**
+     * 创建淡入淡出动画
+     * @param fadeInTime 淡入时间(ticks)
+     * @param stayTime 保持时间(ticks)
+     * @param fadeOutTime 淡出时间(ticks)
+     * @return 动画实例
+     */
+    public HologramAnimation createFadeAnimation(int fadeInTime, int stayTime, int fadeOutTime) {
+        HologramAnimation animation = new FadeAnimation(plugin, fadeInTime, stayTime, fadeOutTime);
+        hologramAnimations.put(animation.getId(), animation);
+        return animation;
+    }
+
+    /**
+     * 创建颜色变换动画
+     * @param colors 颜色列表
+     * @param interval 变换间隔(ticks)
+     * @param smooth 是否平滑过渡
+     * @return 动画实例
+     */
+    public HologramAnimation createColorChangeAnimation(List<Color> colors, int interval, boolean smooth) {
+        HologramAnimation animation = new ColorChangeAnimation(plugin, colors, interval, smooth);
+        hologramAnimations.put(animation.getId(), animation);
+        return animation;
+    }
+
+    /**
+     * 启动全息文本动画
+     * @param hologramId 全息文本ID
+     * @param animationId 动画ID
+     * @return 是否成功启动
+     */
+    public boolean startHologramAnimation(String hologramId, String animationId) {
+        TextDisplay display = getHologramEntity(hologramId);
+        HologramAnimation animation = hologramAnimations.get(animationId);
+        
+        if (display == null || animation == null) {
+            return false;
+        }
+        
+        animation.start(display);
+        return true;
+    }
+
+    /**
+     * 停止全息文本动画
+     * @param hologramId 全息文本ID
+     * @param animationId 动画ID
+     * @return 是否成功停止
+     */
+    public boolean stopHologramAnimation(String hologramId, String animationId) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        HologramAnimation animation = hologramAnimations.get(animationId);
+        
+        if (animation == null) {
+            return false;
+        }
+        
+        TextDisplay textDisplay = hologramManager.getHologram(hologramId);
+        if (textDisplay == null) {
+            return false;
+        }
+        
+        animation.stop(textDisplay);
+        return true;
+    }
+
+    @Override
+    public String createCircularProgressBar(Location location, float radius, 
+                                          double progress, Color fillColor, Color bgColor) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.createCircularProgressBar(location, radius, progress, fillColor, bgColor);
+    }
+    
+    @Override
+    public boolean updateCircularProgressBar(String id, double progress) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.updateCircularProgressBar(id, progress);
+    }
+    
+    @Override
+    public String createVerticalProgressBar(Location location, float width, float height, 
+                                          double progress, Color fillColor, Color bgColor) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.createVerticalProgressBar(location, width, height, progress, fillColor, bgColor);
+    }
+    
+    @Override
+    public boolean updateVerticalProgressBar(String id, double progress) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.updateVerticalProgressBar(id, progress);
+    }
+    
+    @Override
+    public String createInteractivePanel(Location location, String title, String content, 
+                                       String interactionTag, Color bgColor) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.createInteractivePanel(location, title, content, interactionTag, bgColor);
+    }
+    
+    @Override
+    public boolean updatePanel(String id, String title, String content) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.updatePanel(id, title, content);
+    }
+    
+    @Override
+    public boolean setPanelInteractionTag(String id, String interactionTag) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.setPanelInteractionTag(id, interactionTag);
+    }
+    
+    @Override
+    public String createMultilinePanel(Location location, String title, String[] lines, Color bgColor) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.createMultilinePanel(location, title, lines, bgColor);
+    }
+    
+    @Override
+    public String createAutoUpdatePanel(Location location, String title, String initialContent, 
+                                      int updateInterval, java.util.function.Supplier<String> contentSupplier, Color bgColor) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.createAutoUpdatePanel(location, title, initialContent, updateInterval, contentSupplier, bgColor);
+    }
+    
+    @Override
+    public boolean stopAutoUpdate(String id) {
+        HologramManager hologramManager = plugin.getHologramManager();
+        return hologramManager.stopAutoUpdate(id);
     }
 } 
