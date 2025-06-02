@@ -25,8 +25,7 @@ public class ExampleCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            String message = SagaLib.getInstance().getLanguageManager().getText("command.player_only");
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            sender.sendMessage(ChatColor.RED + "该命令只能由玩家执行！");
             return true;
         }
         

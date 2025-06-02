@@ -1,10 +1,8 @@
 package cn.i7mc.sagalib.gui.layout;
 
-import cn.i7mc.sagalib.SagaLib;
 import cn.i7mc.sagalib.gui.button.GuiButton;
 import cn.i7mc.sagalib.gui.holder.GuiHolder;
 import cn.i7mc.sagalib.gui.button.SimpleButton;
-import cn.i7mc.sagalib.config.LanguageManager;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -93,12 +91,9 @@ public class PaginationLayout implements GuiLayout {
      * @param totalPages 总页数
      */
     private void addNavigationButtons(GuiHolder holder, int totalPages) {
-        LanguageManager languageManager = SagaLib.getInstance().getLanguageManager();
-
         // 上一页按钮
         if (currentPage > 0) {
-            String prevText = languageManager.getText("gui.pagination.previous_page");
-            SimpleButton prevButton = new SimpleButton(Material.ARROW, prevText)
+            SimpleButton prevButton = new SimpleButton(Material.ARROW, "&a上一页")
                     .setClickHandler(event -> {
                         currentPage--;
                         apply(holder, allButtons.toArray(new GuiButton[0]));
@@ -106,11 +101,10 @@ public class PaginationLayout implements GuiLayout {
             prevButton.setSlot(holder.getSize() - 9);
             holder.addButton(holder.getSize() - 9, prevButton);
         }
-
+        
         // 下一页按钮
         if (currentPage < totalPages - 1) {
-            String nextText = languageManager.getText("gui.pagination.next_page");
-            SimpleButton nextButton = new SimpleButton(Material.ARROW, nextText)
+            SimpleButton nextButton = new SimpleButton(Material.ARROW, "&a下一页")
                     .setClickHandler(event -> {
                         currentPage++;
                         apply(holder, allButtons.toArray(new GuiButton[0]));
@@ -118,11 +112,10 @@ public class PaginationLayout implements GuiLayout {
             nextButton.setSlot(holder.getSize() - 1);
             holder.addButton(holder.getSize() - 1, nextButton);
         }
-
+        
         // 页码显示
-        String pageInfoFormat = languageManager.getText("gui.pagination.page_info");
-        SimpleButton pageButton = new SimpleButton(Material.PAPER,
-                String.format(pageInfoFormat, currentPage + 1, totalPages));
+        SimpleButton pageButton = new SimpleButton(Material.PAPER, 
+                String.format("&f第 %d/%d 页", currentPage + 1, totalPages));
         pageButton.setSlot(holder.getSize() - 5);
         holder.addButton(holder.getSize() - 5, pageButton);
     }
@@ -145,14 +138,12 @@ public class PaginationLayout implements GuiLayout {
     
     @Override
     public String getName() {
-        LanguageManager languageManager = SagaLib.getInstance().getLanguageManager();
-        return languageManager.getText("gui.pagination.layout_name");
+        return "分页布局";
     }
-
+    
     @Override
     public String getDescription() {
-        LanguageManager languageManager = SagaLib.getInstance().getLanguageManager();
-        String descriptionFormat = languageManager.getText("gui.pagination.layout_description");
-        return String.format(descriptionFormat, itemsPerPage, startRow + 1, startColumn + 1);
+        return String.format("每页%d个物品,从第%d行第%d列开始的分页布局", 
+                itemsPerPage, startRow + 1, startColumn + 1);
     }
 } 

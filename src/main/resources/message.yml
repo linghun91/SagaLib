@@ -1,15 +1,10 @@
-# SagaLib English Language File
+# SagaLib Message Configuration File
 plugin:
-  enable: "&a[SagaLib] Plugin has been enabled"
-  disable: "&c[SagaLib] Plugin has been disabled"
-  reload: "&a[SagaLib] Plugin has been reloaded"
+  enable: "&aSagaLib plugin has been enabled!"
+  disable: "&cSagaLib plugin has been disabled!"
 
+# GUI System Messages
 gui:
-  close: "&cClose"
-  next_page: "&aNext Page"
-  previous_page: "&cPrevious Page"
-  current_page: "&eCurrent Page: %page%/%total%"
-
   pagination:
     previous_page: "&aPrevious Page"
     next_page: "&aNext Page"
@@ -18,6 +13,8 @@ gui:
     layout_description: "Pagination layout with %d items per page, starting from row %d column %d"
 
   style:
+    default_name: "Default Style"
+    default_description: "A simple and elegant default style"
     custom_name: "Custom Style"
     custom_description: "A custom GUI style"
     border_text: "&8Border"

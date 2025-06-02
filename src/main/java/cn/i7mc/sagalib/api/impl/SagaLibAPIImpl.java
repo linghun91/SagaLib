@@ -168,18 +168,13 @@ public class SagaLibAPIImpl implements SagaLibAPI {
 
     @Override
     public GuiStyle createCustomStyle(Material borderMaterial, Material backgroundMaterial, Material buttonMaterial) {
-        String customName = languageManager.getText("gui.style.custom_name");
-        String customDescription = languageManager.getText("gui.style.custom_description");
-        String borderText = languageManager.getText("gui.style.border_text");
-        String backgroundText = languageManager.getText("gui.style.background_text");
-
         return new DefaultStyle(
-            customName,
-            customDescription,
+            "自定义样式",
+            "一个自定义的GUI样式",
             borderMaterial,
             backgroundMaterial,
-            borderText,
-            backgroundText
+            "&8边框",
+            "&7背景"
         );
     }
 
@@ -280,7 +275,7 @@ public class SagaLibAPIImpl implements SagaLibAPI {
         if (holder instanceof BaseGuiHolder) {
             return ((BaseGuiHolder) holder).getAnimationStatus(animation);
         }
-        return languageManager.getText("animation.status.stop");
+        return "STOP";
     }
 
     @Override

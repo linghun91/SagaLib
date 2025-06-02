@@ -27,12 +27,12 @@ public class DefaultStyle implements GuiStyle {
      */
     public DefaultStyle() {
         // 从配置文件读取样式信息
-        this.name = SagaLib.getAPI().getMessageConfig().getString("gui.style.default_name", "默认样式");
-        this.description = SagaLib.getAPI().getMessageConfig().getString("gui.style.default_description", "一个简单美观的默认样式");
+        this.name = SagaLib.getAPI().getMessageConfig().getString("gui.style.default_name", "Default Style");
+        this.description = SagaLib.getAPI().getMessageConfig().getString("gui.style.default_description", "A simple and elegant default style");
         this.borderMaterial = Material.BLACK_STAINED_GLASS_PANE;
         this.backgroundMaterial = Material.GRAY_STAINED_GLASS_PANE;
-        this.borderName = SagaLib.getAPI().getMessageConfig().getString("gui.style.border_text", "&8边框");
-        this.backgroundName = SagaLib.getAPI().getMessageConfig().getString("gui.style.background_text", "&7背景");
+        this.borderName = SagaLib.getAPI().getMessageConfig().getString("gui.style.border_text", "&8Border");
+        this.backgroundName = SagaLib.getAPI().getMessageConfig().getString("gui.style.background_text", "&7Background");
     }
     
     /**
