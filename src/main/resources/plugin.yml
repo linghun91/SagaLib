@@ -1,0 +1,16 @@
+name: SagaLib
+version: ${version}
+main: cn.i7mc.sagalib.SagaLib
+api-version: ${apiVersion}
+authors: [i7mc]
+description: ${description}
+softdepend: [PlaceholderAPI]
+commands:
+  example:
+    description: Test SagaLib functionality
+    usage: /<command> [items|text|color]
+    permission: sagalib.example
+  hologram:
+    description: Hologram text functionality example command
+    usage: /<command> [create|remove|update|animation|progress]
+    permission: sagalib.hologram

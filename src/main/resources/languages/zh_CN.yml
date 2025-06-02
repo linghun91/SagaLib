@@ -1,0 +1,33 @@
+# SagaLib English Language File
+plugin:
+  enable: "&a[SagaLib] Plugin has been enabled"
+  disable: "&c[SagaLib] Plugin has been disabled"
+  reload: "&a[SagaLib] Plugin has been reloaded"
+
+gui:
+  close: "&cClose"
+  next_page: "&aNext Page"
+  previous_page: "&cPrevious Page"
+  current_page: "&eCurrent Page: %page%/%total%"
+
+  pagination:
+    previous_page: "&aPrevious Page"
+    next_page: "&aNext Page"
+    page_info: "&fPage %d/%d"
+    layout_name: "Pagination Layout"
+    layout_description: "Pagination layout with %d items per page, starting from row %d column %d"
+
+  style:
+    custom_name: "Custom Style"
+    custom_description: "A custom GUI style"
+    border_text: "&8Border"
+    background_text: "&7Background"
+
+# Animation System Messages
+animation:
+  status:
+    stop: "STOP"
+
+# Command System Messages
+command:
+  player_only: "&cThis command can only be executed by players!"
